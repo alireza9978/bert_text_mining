@@ -10,9 +10,10 @@ def read_file():
 def main():
     temp_df = read_file()
     kw_model = KeyBERT()
-    temp_sentence = " ".join(temp_df["words"][0])
-    keywords = kw_model.extract_keywords(temp_sentence)
-    print(keywords)
+    temp_df["sentences"] = temp_df["words"].apply(lambda x: " ".join(x))
+    temp_df["keywords"] = temp_df["sentences"].apply(kw_model.extract_keywords)
+    temp_df["keywords"] = temp_df["keywords"].apply(lambda x: [y[0] for y in x])
+    temp_df[['keywords']].to_csv("./drive/MyDrive/keyword_GLA.csv", index=False)
 
 
 if __name__ == '__main__':
